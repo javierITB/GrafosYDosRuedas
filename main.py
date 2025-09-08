@@ -1,5 +1,5 @@
 from classes.grafo import Grafo
-from classes.utils import guardar_grafo_json
+from classes.utils import guardar_grafo_json, actualizar_alturas
 
 if __name__ == "__main__":
     g = Grafo()
@@ -15,6 +15,8 @@ if __name__ == "__main__":
 
     # Mostrar grafo
     print(g)
+    print(g.nodos[1])
+    print(g.caminos[101])
 
     # Guardar en JSON
     guardar_grafo_json(g, "grafo.json")

@@ -28,3 +28,8 @@ def guardar_grafo_json(grafo: Grafo, ruta_archivo: str):
         json.dump(data, f, indent=4, ensure_ascii=False)
 
     print(f"Grafo guardado en {ruta_archivo}")
+
+
+
+def actualizar_alturas():
+    print("")

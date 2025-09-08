@@ -1,5 +1,4 @@
 from typing import List, Optional
-from .camino import Camino
 
 class Nodo:
     def __init__(self,
@@ -13,10 +12,12 @@ class Nodo:
         self.longitud = longitud
         self.altura = altura
         self.prob_accidente = prob_accidente
-        self.caminos: List[Camino] = []
-        self.vecinos: List['Nodo'] = []
+        self.caminos: List['Camino'] = []  # Caminos que pasan por este nodo
+        self.vecinos: List['Nodo'] = []    # Nodos conectados
 
-    def agregar_camino(self, camino: Camino):
+    def agregar_camino(self, camino: 'Camino'):
+        # Import local para evitar circularidad
+        from .camino import Camino
         if camino not in self.caminos:
             self.caminos.append(camino)
             otro = camino.obtener_otro_nodo(self)
@@ -24,4 +25,5 @@ class Nodo:
                 self.vecinos.append(otro)
 
     def __repr__(self):
-        return f"Nodo({self.id}, lat={self.latitud}, lon={self.longitud}, alt={self.altura}, p_acc={self.prob_accidente})"
+        return (f"Nodo({self.id}, lat={self.latitud}, lon={self.longitud}, "
+                f"alt={self.altura}, p_acc={self.prob_accidente})")
