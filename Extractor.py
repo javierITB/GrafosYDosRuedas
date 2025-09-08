@@ -1,4 +1,5 @@
 from typing import List, Dict, Optional
+import json
 
 class Nodo:
     def __init__(self,
@@ -79,3 +80,58 @@ class Grafo:
 
     def __repr__(self):
         return f"Grafo(nodos={len(self.nodos)}, caminos={len(self.caminos)})"
+
+
+def guardar_grafo_json(grafo: Grafo, ruta_archivo: str):
+    """
+    Guarda el grafo en un archivo JSON con toda la información de nodos y caminos.
+    """
+    data = {
+        "nodos": [],
+        "caminos": []
+    }
+
+    # Guardar nodos
+    for nodo in grafo.nodos.values():
+        data["nodos"].append({
+            "id": nodo.id,
+            "latitud": nodo.latitud,
+            "longitud": nodo.longitud,
+            "altura": nodo.altura,
+            "prob_accidente": nodo.prob_accidente,
+            "vecinos": [v.id for v in nodo.vecinos],
+            "caminos": [c.id for c in nodo.caminos]
+        })
+
+    # Guardar caminos
+    for camino in grafo.caminos.values():
+        data["caminos"].append({
+            "id": camino.id,
+            "nodos": [camino.nodos[0].id, camino.nodos[1].id],
+            "ciclovia": camino.ciclovia,
+            "importancia": camino.importancia,
+            "vecinos": [c.id for c in camino.vecinos]
+        })
+
+    with open(ruta_archivo, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=4, ensure_ascii=False)
+
+    print(f"Grafo guardado en {ruta_archivo}")
+
+
+if __name__ == "__main__":
+    g = Grafo()
+
+    # Crear nodos
+    g.agregar_nodo(1, -33.45, -70.65, 600, 0.1)
+    g.agregar_nodo(2, -33.46, -70.66, 605, 0.05)
+    g.agregar_nodo(3, -33.47, -70.67, 610, 0.2)
+
+    # Crear caminos
+    g.agregar_camino(101, 1, 2, ciclovia=True, importancia=2)
+    g.agregar_camino(102, 2, 3, ciclovia=False, importancia=3)
+
+    # Mostrar grafo
+    print(g)
+    print(g.nodos[1])
+    print(g.caminos[101])

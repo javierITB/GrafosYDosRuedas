@@ -4,18 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8b61c0af-87b5-4c4e-b7ae-c71afc201ebd" name="Changes" comment="Creacion directorio">
-      <change afterPath="$PROJECT_DIR$/Mapas/CICLOVchile_shp/CICLOVIASchile_jul25/CICLOVnac_jul25.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Mapas/CICLOVchile_shp/CICLOVIASchile_jul25/SHP/CICLOVnac_jul25.cpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Mapas/CICLOVchile_shp/CICLOVIASchile_jul25/SHP/CICLOVnac_jul25.dbf" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Mapas/CICLOVchile_shp/CICLOVIASchile_jul25/SHP/CICLOVnac_jul25.prj" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Mapas/CICLOVchile_shp/CICLOVIASchile_jul25/SHP/CICLOVnac_jul25.sbn" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Mapas/CICLOVchile_shp/CICLOVIASchile_jul25/SHP/CICLOVnac_jul25.sbx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Mapas/CICLOVchile_shp/CICLOVIASchile_jul25/SHP/CICLOVnac_jul25.shp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Mapas/CICLOVchile_shp/CICLOVIASchile_jul25/SHP/CICLOVnac_jul25.shp.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Mapas/CICLOVchile_shp/CICLOVIASchile_jul25/SHP/CICLOVnac_jul25.shx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Mapas/CICLOVchile_shp/CICLOVIASchile_jul25/~$CICLOVnac_jul25.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Mapas/map.osm" afterDir="false" />
+    <list default="true" id="8b61c0af-87b5-4c4e-b7ae-c71afc201ebd" name="Changes" comment="Main añadido con ejemplo de creacion de grafo">
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Extractor.py" beforeDir="false" afterPath="$PROJECT_DIR$/Extractor.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,12 +25,18 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="GithubPullRequestsUISettings"><![CDATA[{
-  "selectedUrlAndAccountId": {
-    "url": "https://github.com/javierITB/GrafosYDosRuedas",
-    "accountId": "05b87b3d-bde9-420a-8fb7-200906fe7fdf"
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;javierITB&quot;
   }
-}]]></component>
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/javierITB/GrafosYDosRuedas&quot;,
+    &quot;accountId&quot;: &quot;05b87b3d-bde9-420a-8fb7-200906fe7fdf&quot;
+  }
+}</component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
 }</component>
@@ -49,22 +48,29 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/vicho/PycharmProjects/Grafos/Mapas&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "last_opened_file_path": "C:/Users/vicho/PycharmProjects/Grafos/Mapas",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\vicho\PycharmProjects\Grafos\Mapas" />
+    </key>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -80,7 +86,8 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1756944662371</updated>
-      <workItem from="1756944663391" duration="2101000" />
+      <workItem from="1756944663391" duration="8328000" />
+      <workItem from="1757291705563" duration="2278000" />
     </task>
     <task id="LOCAL-00001" summary="Creacion directorio">
       <option name="closed" value="true" />
@@ -98,7 +105,39 @@
       <option name="project" value="LOCAL" />
       <updated>1756946780836</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Mapas Iniciales Añadidos">
+      <option name="closed" value="true" />
+      <created>1756947134585</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1756947134585</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Archivos de dudosa funcionalidad">
+      <option name="closed" value="true" />
+      <created>1756947167311</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1756947167311</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Estructura base de grafo">
+      <option name="closed" value="true" />
+      <created>1757295072976</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1757295072977</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Main añadido con ejemplo de creacion de grafo">
+      <option name="closed" value="true" />
+      <created>1757295515943</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1757295515943</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -106,6 +145,10 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Creacion directorio" />
-    <option name="LAST_COMMIT_MESSAGE" value="Creacion directorio" />
+    <MESSAGE value="Mapas Iniciales Añadidos" />
+    <MESSAGE value="Archivos de dudosa funcionalidad" />
+    <MESSAGE value="Estructura base de grafo" />
+    <MESSAGE value="Main añadido con ejemplo de creacion de grafo" />
+    <option name="LAST_COMMIT_MESSAGE" value="Main añadido con ejemplo de creacion de grafo" />
   </component>
 </project>
