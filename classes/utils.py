@@ -30,6 +30,3 @@ def guardar_grafo_json(grafo: Grafo, ruta_archivo: str):
     print(f"Grafo guardado en {ruta_archivo}")
 
 
-
-def actualizar_alturas():
-    print("")
