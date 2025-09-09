@@ -1,5 +1,6 @@
 from typing import List, Dict, Optional
 import json
+import pandas as pd
 
 class Nodo:
     def __init__(self,
@@ -80,6 +81,41 @@ class Grafo:
 
     def __repr__(self):
         return f"Grafo(nodos={len(self.nodos)}, caminos={len(self.caminos)})"
+
+
+def extraer_accidentes_a_grafo(ruta_excel: str, grafo: 'Grafo'):
+    """
+    Lee el archivo Excel de accidentes y agrega caminos al grafo solo para filas con dos calles.
+    """
+    df = pd.read_excel(ruta_excel)
+    id_nodo = max(grafo.nodos.keys(), default=0) + 1
+    id_camino = max(grafo.caminos.keys(), default=0) + 1
+    nombre_a_id = {}  # Mapea nombre de calle a id de nodo
+
+    for _, row in df.iterrows():
+        calle_1 = str(row.get('CALLE_1', '')).strip()
+        calle_2 = str(row.get('CALLE_2', '')).strip()
+        # Omitir filas sin dos calles válidas
+        if not calle_1 or not calle_2 or calle_2 == '-' or calle_1 == '-':
+            continue
+
+        # Asignar id único a cada calle
+        for calle in [calle_1, calle_2]:
+            if calle not in nombre_a_id:
+                nombre_a_id[calle] = id_nodo
+                grafo.agregar_nodo(id_nodo, 0.0, 0.0)  # Sin lat/lon por ahora
+                id_nodo += 1
+
+        id_a = nombre_a_id[calle_1]
+        id_b = nombre_a_id[calle_2]
+        # Evitar caminos duplicados
+        if not any(
+            (camino.nodos[0].id == id_a and camino.nodos[1].id == id_b) or
+            (camino.nodos[0].id == id_b and camino.nodos[1].id == id_a)
+            for camino in grafo.caminos.values()
+        ):
+            grafo.agregar_camino(id_camino, id_a, id_b)
+            id_camino += 1
 
 
 def guardar_grafo_json(grafo: Grafo, ruta_archivo: str):
