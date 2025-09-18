@@ -145,3 +145,33 @@ def a_estrella(grafo, inicio_id: int, objetivo_id: int,
 astar = a_estrella
 haversine = distancia_haversine
 edge_cost = coste_arista
+
+
+def asignar_indicador_seguridad(grafo, scores: Dict[str, float], nodo_attr: str = 'comuna') -> None:
+    """Asigna valores de seguridad a los nodos del grafo.
+
+    - `scores`: dict donde las claves son nombres de grupo (p. ej. 'RENCA') y los valores el score.
+    - `nodo_attr`: nombre del atributo en cada `Nodo` que contiene el grupo (por defecto 'comuna').
+
+    La búsqueda del atributo es flexible: se toma el valor del atributo si existe
+    (puede añadirse dinámicamente a los nodos) y se hace match en mayúsculas.
+    Si no se encuentra un valor para un nodo, no se modifica su `prob_accidente`.
+    """
+    # Normalizar claves de scores
+    scores_norm = {str(k).strip().upper(): float(v) for k, v in scores.items()}
+
+    for nodo in grafo.nodos.values():
+        grupo = None
+        if hasattr(nodo, nodo_attr):
+            grupo = getattr(nodo, nodo_attr)
+        else:
+            # intentar minúscula por si el atributo fue seteado en otra forma
+            if hasattr(nodo, nodo_attr.lower()):
+                grupo = getattr(nodo, nodo_attr.lower())
+
+        if grupo is None:
+            continue
+
+        key = str(grupo).strip().upper()
+        if key in scores_norm:
+            nodo.prob_accidente = scores_norm[key]

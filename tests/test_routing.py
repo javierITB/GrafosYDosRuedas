@@ -28,6 +28,19 @@ class TestRouting(unittest.TestCase):
         self.assertIn(3, dist)
         self.assertIsNotNone(prev[3])
 
+    def test_asignar_indicador_seguridad(self):
+        # asignar atributo comuna a nodos
+        self.g.nodos[1].comuna = 'RENCA'
+        self.g.nodos[2].comuna = 'VITACURA'
+        self.g.nodos[3].comuna = 'RENCA'
+
+        scores = {'RENCA': 0.8, 'VITACURA': 0.2}
+        routing.asignar_indicador_seguridad(self.g, scores, nodo_attr='comuna')
+
+        self.assertAlmostEqual(self.g.nodos[1].prob_accidente, 0.8)
+        self.assertAlmostEqual(self.g.nodos[2].prob_accidente, 0.2)
+        self.assertAlmostEqual(self.g.nodos[3].prob_accidente, 0.8)
+
 
 if __name__ == '__main__':
     unittest.main()
