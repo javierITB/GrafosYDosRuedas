@@ -4,7 +4,7 @@
             "id": 1,
             "latitud": -33.45,
             "longitud": -70.65,
-            "altura": 551.8482508393244,
+            "altura": 0.0,
             "prob_accidente": 0.1,
             "vecinos": [
                 2
@@ -17,7 +17,7 @@
             "id": 2,
             "latitud": -33.46,
             "longitud": -70.66,
-            "altura": 538.6757544526522,
+            "altura": 0.0,
             "prob_accidente": 0.05,
             "vecinos": [
                 1,
@@ -32,7 +32,7 @@
             "id": 3,
             "latitud": -33.47,
             "longitud": -70.67,
-            "altura": 520.7842226039579,
+            "altura": 0.0,
             "prob_accidente": 0.2,
             "vecinos": [
                 2
