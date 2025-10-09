@@ -8,3 +8,40 @@ https://project-osrm.org/
 https://www.dtpm.cl/index.php/sistema-transporte-publico-santiago/datos-y-servicios
 https://gtfs.org/
 https://www.opentripplanner.org/
+
+## Objetivo de archivos en `/classes`
+
+**nodo.py**
+Objetivo: Define nodo de grafo.
+Input: id, lat, lon, alt, prob_accidente
+Output: Nodo con vecinos y caminos
+
+**camino.py**
+Objetivo: Define conexión entre nodos.
+Input: id, nodo_a, nodo_b, ciclovia, importancia (importanacia es para penalizar o favorecer rutas)
+Output: Camino enlazando nodos
+
+**grafo.py**
+Objetivo: Gestiona nodos y caminos.
+Input: nodos y caminos
+Output: Grafo completo
+
+**safety.py**
+Objetivo: Calcula indicador de seguridad.
+Input: ruta Excel, agrupación
+Output: Diccionario {grupo: score}
+
+**routing.py**
+Objetivo: Algoritmos de ruteo (Dijkstra, A*).
+Input: grafo, nodos, pesos
+Output: Camino óptimo (lista de nodos)
+
+**utils.py**
+Objetivo: Guardar grafo en JSON.
+Input: grafo, ruta archivo
+Output: Archivo JSON
+
+**utils2.py**
+Objetivo: Estimar altura por coordenadas.
+Input: latitud, longitud
+Output: Altura estimada
