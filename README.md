@@ -18,7 +18,7 @@ Output: Nodo con vecinos y caminos
 
 **camino.py**
 Objetivo: Define conexión entre nodos.
-Input: id, nodo_a, nodo_b, ciclovia, importancia (importanacia es para penalizar o favorecer rutas)
+Input: id, nodo_a, nodo_b, ciclovia, importancia (importanacia es para penalizar o favorecer rutas solo segun la seguridad de la comunas)
 Output: Camino enlazando nodos
 
 **grafo.py**
