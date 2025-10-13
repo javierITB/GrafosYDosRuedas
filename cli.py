@@ -5,6 +5,11 @@ leer Excel de accidentes -> calcular indicador -> asignar a nodos -> calcular ru
 Ejemplo:
   PYTHONPATH=. python3 GrafosYDosRuedas/cli.py --accidentes data/os2_sin_2025_08.xlsx \
     --agrupar COMUNA --inicio 1 --objetivo 3 --alg astar --w_dist 1.0 --w_elev 0.01 --w_seg 1.0
+
+    otro ejemplo:
+
+    python .\cli.py --accidentes data/os2_sin_2025_08.xlsx --agrupar COMUNA --inicio 386235 --objetivo 386236 --alg astar --w_dist 1.0 --w_elev 0.01 --w_seg 1.0
+
 """
 
 import argparse
@@ -15,17 +20,70 @@ from classes.grafo import Grafo
 from classes import routing
 from classes import safety
 from classes.utils import guardar_grafo_json
+import xml.etree.ElementTree as ET
 
+def construir_grafo_desde_osm():
+    """
+    Construye un grafo a partir de un archivo .osm (OpenStreetMap XML).
 
-def construir_grafo_de_ejemplo():
-    # Ejemplo mínimo; en producción deberías construir el grafo desde OSM o shapefiles
+    Parámetros:
+        ruta_osm (str): ruta al archivo .osm
+
+    Retorna:
+        Grafo: instancia del grafo con los nodos y caminos cargados
+    """
+
+    ruta_osm = "data/map_with_elevation.osm"
+
     g = Grafo()
-    g.agregar_nodo(1, -33.45, -70.65, 0.0, 0.0)
-    g.agregar_nodo(2, -33.46, -70.66, 0.0, 0.0)
-    g.agregar_nodo(3, -33.47, -70.67, 0.0, 0.0)
-    g.agregar_camino(101, 1, 2, ciclovia=True, importancia=2)
-    g.agregar_camino(102, 2, 3, ciclovia=False, importancia=3)
+
+    tree = ET.parse(ruta_osm)
+    root = tree.getroot()
+
+    # 1️⃣ Cargar todos los nodos (lat, lon, elevación)
+    nodos = {}
+    for node in root.findall("node"):
+        node_id = int(node.attrib["id"])
+        lat = float(node.attrib["lat"])
+        lon = float(node.attrib["lon"])
+        ele = float(node.attrib.get("ele", 0.0))
+        g.agregar_nodo(node_id, lat, lon, ele, 0)  # puedes adaptar 'x' según tu sistema
+        nodos[node_id] = (lat, lon, ele)
+
+    # 2️⃣ Cargar las vías (campos)
+    for way in root.findall("way"):
+        way_id = int(way.attrib["id"])
+        refs = [int(nd.attrib["ref"]) for nd in way.findall("nd")]
+
+        # Filtrar solo las vías que sean caminos o ciclovías
+        tags = {t.attrib["k"]: t.attrib["v"] for t in way.findall("tag")}
+        highway_type = tags.get("highway")
+        if not highway_type:
+            continue  # ignorar vías que no sean caminos
+
+        # Marcar si es ciclovía
+        ciclovia = (highway_type == "cycleway") or (tags.get("bicycle") == "yes")
+
+        # Importancia simple según tipo de camino
+        importancia = {
+            "motorway": 1,
+            "primary": 2,
+            "secondary": 3,
+            "tertiary": 4,
+            "residential": 5,
+            "cycleway": 6,
+        }.get(highway_type, 10)
+
+        # Crear conexiones entre nodos consecutivos
+        for i in range(len(refs) - 1):
+            n1 = refs[i]
+            n2 = refs[i + 1]
+            if n1 in nodos and n2 in nodos:
+                g.agregar_camino(way_id, n1, n2, ciclovia=ciclovia, importancia=importancia)
+
     return g
+
+
 
 
 def main():
@@ -43,7 +101,8 @@ def main():
     args = p.parse_args()
 
     # construir o cargar grafo
-    g = construir_grafo_de_ejemplo()
+    g = construir_grafo_desde_osm()
+    print(f"Grafo construido con {len(g.nodos)} nodos y {len(g.caminos)} caminos.")
 
     # calcular indicador de seguridad
     print(f'Calculando indicador desde {args.accidentes} agrupando por {args.agrupar}...')
