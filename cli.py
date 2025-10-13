@@ -33,7 +33,7 @@ def construir_grafo_desde_osm():
         Grafo: instancia del grafo con los nodos y caminos cargados
     """
 
-    ruta_osm = "data/map_with_elevation.osm"
+    ruta_osm = "data/map_with_elevation.osm" # Reemplazar por otra direccion del .osm al que se quiere armar el grafo
 
     g = Grafo()
 
