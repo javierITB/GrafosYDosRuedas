@@ -1,9 +1,17 @@
+import os
 import pandas as pd
 import numpy as np
 from scipy.spatial import cKDTree
 
+# Resolve path relative to package root: Mapas/DataCiclovias/alturas_santiago.csv
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+ALT_PATH = os.path.join(BASE_DIR, 'Mapas', 'DataCiclovias', 'alturas_santiago.csv')
+if not os.path.exists(ALT_PATH):
+    # Fallback to data/ for backward compatibility
+    ALT_PATH = os.path.join(BASE_DIR, '..', 'data', 'alturas_santiago.csv')
+
 # Cargar dataset y preparar árbol
-DF = pd.read_csv("data/alturas_santiago.csv")  # ruta del dataset, no la muevan chicos
+DF = pd.read_csv(ALT_PATH)
 COORDS = DF[['lat', 'lon']].values
 TREE = cKDTree(COORDS)
 

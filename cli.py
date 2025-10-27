@@ -75,11 +75,15 @@ def construir_grafo_desde_osm():
         }.get(highway_type, 10)
 
         # Crear conexiones entre nodos consecutivos
+        # Use a unique id for each segment (way may have many segments).
+        # Start an incremental counter for caminos to avoid id collisions.
+        id_camino_counter = max(g.caminos.keys(), default=0) + 1
         for i in range(len(refs) - 1):
             n1 = refs[i]
             n2 = refs[i + 1]
             if n1 in nodos and n2 in nodos:
-                g.agregar_camino(way_id, n1, n2, ciclovia=ciclovia, importancia=importancia)
+                g.agregar_camino(id_camino_counter, n1, n2, ciclovia=ciclovia, importancia=importancia)
+                id_camino_counter += 1
 
     return g
 
