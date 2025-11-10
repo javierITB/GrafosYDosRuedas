@@ -1,0 +1,224 @@
+\documentclass[12pt, a4paper, spanish]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish]{babel}
+\usepackage{geometry}
+\usepackage{graphicx}
+\usepackage{titlesec}
+\usepackage{hyperref}
+
+% Configuración de títulos
+\titleformat{\section}{\large\bfseries}{\thesection}{1em}{}
+\titleformat{\subsection}{\normalsize\bfseries}{\thesubsection}{1em}{}
+
+\begin{document}
+
+\begin{titlepage}
+    \centering % Centra todo el contenido de la titlepage
+    
+    % Imagen en esquina superior izquierda
+    \begin{flushleft}
+        \makebox[0pt][l]{\includegraphics[width=4cm]{UDPA.png}}\\
+    \end{flushleft}
+    
+    \vspace{3cm} % Espacio después de la imagen
+    
+    % Título centrado
+    {\Large\bfseries Informe Propuesta de Proyecto Semestral:}\\
+    \vspace{0.5cm}
+    {\LARGE\bfseries Sistema de Optimización de Rutas Ciclísticas para Santiago mediante Teoría de Grafos}
+    
+    \vspace{2cm} % Espacio después del título
+    
+    % Información del curso e integrantes (centrado)
+    {\large
+    Curso: Grafos y Algoritmos \\
+    \vspace{0.5cm}
+    Integrantes del Grupo: \\
+    Omar Marca \\
+    Rafael Maturana \\
+    Vicente Torres \\ 
+    Felipe Mora
+    }
+    
+    \vfill % Espacio flexible para empujar la fecha hacia abajo
+    
+    % Fecha
+    {\large \today}
+    
+\end{titlepage}
+
+\newpage
+\tableofcontents
+\newpage
+% ===== Page 1: Portada y Resumen =====
+\begin{abstract}
+    Esta propuesta presenta el diseño e implementación de un sistema de software basado en teoría de grafos para la optimización de rutas ciclistas en la ciudad de Santiago de Chile. El sistema integrará datos heterogéneos como ciclovías, relieve, índice de peligrosidad por tráfico en un grafo multimodal, con el objetivo de calcular rutas personalizadas que minimicen criterios como esfuerzo físico, tiempo de trayecto o riesgo ante accidentes. La solución propuesta aborda un problema tangible para un usuario específico —el ciclista urbano— y se sustenta en una revisión de algoritmos clásicos de caminos mínimos y su adaptación a multi-objetivo. El presente documento define formalmente el problema, caracteriza al usuario, establece los objetivos del desarrollo y fundamenta la metodología y algoritmos propuestos para el proyecto.
+
+\end{abstract}
+
+
+\newpage
+
+% ===== Sección 1: Introducción =====
+\section{Introducción}
+\subsection{Contexto y Motivación}
+El uso de la bicicleta como medio de transporte ha ido en aumento en Santiago, impulsado por la congestión vehicular y una mayor conciencia medioambiental. Sin embargo, los ciclistas urbanos deben enfrentar varios desafíos propios de la ciudad, como una red de ciclovías que a menudo se encuentra desconectada, calles con pendientes pronunciadas que dificultan el pedaleo, y preocupaciones constantes sobre la seguridad vial y personal.
+
+Las herramientas de planificación de rutas más comunes, como Google Maps, suelen priorizar la ruta más corta en distancia o tiempo, pero no consideran factores críticos para un ciclista, como el desnivel del terreno o los historiales de accidentes de tránsito en una vía. Esto deja a los usuarios sin opciones para planificar recorridos que se adapten a sus preferencias específicas de esfuerzo, seguridad o comodidad.
+
+Este proyecto nace de la motivación de utilizar conceptos de grafos y algoritmos para crear una solución a medida. La idea central es integrar en un único modelo datos diversos —como la red de ciclovías, el relieve de la ciudad y reportes de incidentes— para poder calcular y recomendar rutas que sean verdaderamente óptimas para la experiencia ciclística en Santiago.
+
+% ===== Sección 2: Descripción del Usuario =====
+\section{Descripción del Usuario}
+\label{sec:usuario}
+
+\begin{itemize}
+    \item \textbf{Rubro y funciones principales:} El usuario final es el \textbf{ciclista urbano en Santiago}. Sus funciones principales son desplazarse por la ciudad para fines de trabajo, estudio, recreación o deporte. Por lo tanto, es un usuario que está consciente de su seguridad, eficiencia y comodidad a la hora de desplazarse en bicicleta.
+
+    \item \textbf{Entorno de trabajo:} Se desenvuelve en el espacio vial de Santiago y se caracteria por una red de ciclovías oficiales (a menudo fragmentadas), calles compartidas con vehículos motorizados, y un terreno con variaciones significativas en el relieve (como sucede con las diferencias de alturas entre comunas como Providencia y Las Condes).
+
+    \item \textbf{Información relevante para el problema:} El usuario toma decisiones en función de múltiples variables como son distancia, tiempo de viaje, esfuerzo físico, accidentes reportados en la zona, y preferencia por infraestructura dedicada a ciclistas como las ciclovías. Por lo tanto, nuestro sistema debe considerar estas variables para ser relevante y ofrecer un valor para los usuarios que lo utilicen.
+\end{itemize}
+
+% ===== Sección 3: Definición del Problema =====
+\section{Definición del Problema}
+\label{sec:problema}
+
+\subsection{Planteamiento General}
+Los ciclistas urbanos de Santiago carecen de una herramienta de planificación de rutas que considere de manera integral y personalizable factores más allá de la distancia pura, tales como el desnivel, la seguridad vial y la calidad de la infraestructura ciclística.
+
+\subsection{Supuestos}
+\begin{enumerate}
+    \item Los datos de elevación de cada nodo son suficientemente precisos para calcular pendientes por tramo a nivel de calle.
+    \item Es posible asignar métricas de ``peligrosidad'' o ``estrés'' a segmentos viales mediante datos abiertos (como registros de accidentes de tránsito, ancho de la calzada y presencia de ciclovía).
+    \item El usuario puede expresar sus preferencias (ej.: ``priorizar ciclovías'', ``evitar subidas pronunciadas'', ``minimizar riesgo'').
+\end{enumerate}
+
+\subsection{Dimensiones del Problema}
+\begin{itemize}
+    \item \textbf{Espacial:} El área a considerar será acotada a la región metropolitana de Santiago, Chile. Excluyendo comunas perifericas como peñaflor, melipilla, buin, paine, colina, lampa, y los alrededores de las comunas mencionadas.
+    \item \textbf{Temporal:} La solución calculará rutas "on demand", por lo que supone un desafío en la optimización de procesos computacionales en terminos de tiempos de ejecución. Además, el modelamiento y la integración de datos es un proceso offline previo.
+    \item \textbf{De Decisión:} Determinar la secuencia óptima de segmentos de calles y ciclovías que conectan un origen A con un destino B, optimizando según una función de costo multi-criterio.
+\end{itemize}
+
+\subsection{Decisiones Involucradas}
+Las principales decisiones del modelamiento son:
+\begin{itemize}
+    \item Cómo representar la ciudad como un grafo (definición de nodos y aristas).
+    \item Qué peso asignar a cada arista (distancia, pendiente promedio, coeficiente de peligrosidad).
+    \item Cómo combinar estos pesos en una única función de costo.
+    \item Qué algoritmo de caminos es el más adecuado (Dijkstra, A*, variantes multi-criterio).
+\end{itemize}
+El problema se sustenta directamente en la descripción del usuario (Sección \ref{sec:usuario}), ya que las decisiones de modelamiento buscan capturar las variables relevantes para el ciclista.
+
+% ===== Sección 4: Objetivos =====
+\section{Objetivos}
+\label{sec:objetivos}
+
+\subsection{Objetivo Principal}
+Desarrollar un prototipo de software que mediante un modelo de grafos sea capaz de calcular y recomendar la ruta óptima para un ciclista en Santiago, integrando variables de distancia, relieve y seguridad de manera personalizable.
+
+\subsection{Evaluación de la Situación Actual}
+Actualmente, los ciclistas utilizan aplicaciones como Google Maps o Komoot. Sin embargo, estas presentan limitaciones:
+\begin{itemize}
+    \item \textbf{Google Maps:} Prioriza a menudo la ruta más corta o rápida para automóviles, sin una consideración profunda de la infraestructura ciclista específica o la peligrosidad. Su cálculo de pendientes es inexistente en modo bicicleta.
+    \item \textbf{Komoot:} Mejor para recreación, pero su modelo de negocio freemium limita el acceso a mapas detallados y su conocimiento del contexto local de Santiago (como la calidad real de una ciclovía y robos en la misma) puede ser inferior.
+\end{itemize}
+
+\subsection{Objetivos Específicos}
+\begin{enumerate}
+    \item \textbf{Modelamiento:} Construir un grafo que represente fielmente la red vial ciclable de Santiago.
+    \item \textbf{Ingesta de datos:} Desarrollar scripts para fusionar datos de OpenStreetMap (calles, ciclovias) datos de elevación (Google Earth Pro), y datos de seguridad (datos abiertos de accidentes o informes de criminalidad).
+    \item \textbf{Ponderación:} Definir funciones para calcular el peso de cada arista en función de: longitud, pendiente, score\_peligrosidad, tipo\_vial.
+    \item \textbf{Algoritmo:} Implementar un algoritmo de camino mínimo (ej.: Dijkstra) capaz de operar con la función de costo compuesta, permitiendo al usuario escoger factor predominante.
+    \item \textbf{Interfaz:} Crear una interfaz de línea de comandos (CLI) o web básica para ingresar origen, destino y preferencias, y visualizar la ruta resultante.
+\end{enumerate}
+Estos objetivos están directamente alineados con el problema definido en la Sección \ref{sec:problema}.
+
+% --- SECCIÓN 5: MODELO Y ALTERNATIVAS DE SOLUCIÓN ---
+\section{Modelo y Alternativas de Solución}
+
+\begin{itemize}
+    \item \textbf{Nodos (V):} Intersecciones de calles/ciclovías o puntos de interés.
+    \item \textbf{Aristas (E):} Segmentos de calles o ciclovías que conectan dos nodos.
+    \item \textbf{Pesos (W):} Cada arista \( e \) tendrá un vector de pesos \( w_e = (d, s, r) \) donde:
+    \begin{itemize}
+        \item \( d \) = longitud en metros.
+        \item \( s \) = score de esfuerzo (derivado de la pendiente).
+        \item \( r \) = score de riesgo (derivado de datos de accidentes, tipo de vía).
+    \end{itemize}
+\end{itemize}
+
+Este modelo es estándar en problemas de routing \cite{bast2016} y es suficientemente flexible para incorporar los múltiples atributos relevantes para el ciclista.
+
+\subsection{Estrategia de Resolución y Evaluación}
+Dada la naturaleza multi-objetivo del problema \textbf{no nos limitaremos a un único algoritmo de manera prematura}.\\
+
+Nuestra estrategia consta de las siguientes etapas:
+
+\begin{enumerate}
+    \item \textbf{Implementación de Alternativas:} Se implementarán y probarán al menos dos algoritmos candidatos para realizar una evaluación comparativa. Los principales candidatos a evaluar son:
+    \begin{itemize}
+        \item \textbf{Algoritmo de Colonias de Hormigas (ACO):} Se seleccionará para su evaluación debido a su idoneidad en problemas de optimización multi-objetivo y su naturaleza metaheurística. ACO es particularmente efectivo para encontrar soluciones de compromiso (o \emph{trade-offs}) entre varios objetivos en conflicto, como minimizar la distancia, el esfuerzo y el riesgo de manera simultánea. A diferencia de los algoritmos que operan sobre un costo agregado (como una combinación lineal fija), las metaheurísticas como ACO pueden explorar el \emph{frente de Pareto} de soluciones no dominadas, lo que se alinea perfectamente con la naturaleza personalizable de nuestro sistema \cite{dorigo2006}.
+        \item \textbf{Algoritmo A*:} Se explorará el uso de este algoritmo debido a su potencial para ser más eficiente computacionalmente que Dijkstra si se logra definir una heurística admisible y consistente para nuestra función de costo compuesta.
+    \end{itemize}\\
+
+    Eventualmente se podrían testear otros algoritmos mientras cumplan con las caracteristicas del proyecto.
+    
+    \item \textbf{Métrica de Evaluación:} El algoritmo óptimo será seleccionado en base a un balance entre:
+    \begin{itemize}
+        \item \textbf{Precisión:} La capacidad de encontrar rutas que minimicen efectivamente la función de costo definida.
+        \item \textbf{Eficiencia Computacional:} El tiempo de ejecución y el uso de recursos.
+        \item \textbf{Implementación:} La facilidad de adaptar el algoritmo para trabajar con nuestra función de costo multi-factorial.
+        \item \textbf{Auto comparativa:} Al realizar busqueda en un sistema multihilo, se comparará ventaja al minimizar las variables a considerar por sobre los pares, de modo que las rutas que tengan mayor rendimiento minimizado variables, serán consideradas como mejores.
+    \end{itemize}
+    
+    \item \textbf{Función de Costo:} Independiente del algoritmo, la función de costo para una arista será una \textbf{combinación lineal configurable} de los pesos normalizados:
+    \[
+    \text{costo}(e) = \alpha \cdot d_{\text{norm}} + \beta \cdot s_{\text{norm}} + \gamma \cdot r_{\text{norm}}
+    \]
+    
+\end{enumerate}
+
+Esta estrategia está sustentada en la literatura \cite{cormen2009}, que recomienda la evaluación comparativa de algoritmos para problemas de routing específicos. Este enfoque nos permitirá tomar una decisión informada y justificada, seleccionando la mejor herramienta para el problema específico de routing ciclista en Santiago.
+
+\subsection{Datos Requeridos y su Análisis}
+
+\begin{itemize}
+    \item \textbf{Red Vial:} Datos obtenidos de OpenStreetMap que contiene información sobre tipos de vía, lo que permite identificar ciclovías y calles.
+    \item \textbf{Relieve:} Datos obtenidos de la aplicación Google Earth Pro con los que se calculará la pendiente de cada segmento de calle mediante interpolación entre la altura de los nodos más cercanos.
+    \item \textbf{Peligrosidad:} Datos de accidentes de tránsito (datos obtenibles de CONASET o Carabineros). Se analizarán para crear un heatmap de riesgo que se pueda mapear a los segmentos del grafo.
+    \item \textbf{Análisis:} El análisis consistirá en procesar estos datos crudos, limpiarlos, y mapearlos al grafo. Por ejemplo, para la peligrosidad, se podría calcular el número de accidentes por km en un área y asignar un score a las aristas dentro de esa área.
+\end{itemize}
+
+% ===== Bibliografía =====
+\begin{thebibliography}{9}
+
+\bibitem{bast2016}
+Bast, H., Delling, D., Goldberg, A., Müller-Hannemann, M., Pajor, T., Sanders, P., \ldots \& Werneck, R. F. (2016). Route planning in transportation networks. In \emph{Algorithm engineering} (pp. 19-80). Springer, Cham.
+
+\bibitem{dorigo2006}
+Dorigo, M., \& Stützle, T. (2006). Ant colony optimization: overview and recent advances. In \emph{International Series in Operations Research \& Management Science} (Vol. 57, pp. 227-263). Springer.
+
+\bibitem{cormen2009}
+Cormen, T. H., Leiserson, C. E., Rivest, R. L., \& Stein, C. (2009). \emph{Introduction to algorithms}. MIT press.
+
+\bibitem{deb2001}
+Deb, K. (2001). \emph{Multi-objective optimization using evolutionary algorithms} (Vol. 16). John Wiley \& Sons.
+
+\bibitem{openstreetmap}
+OpenStreetMap contributors. (2023). \emph{Planet dump}. Retrieved from https://www.openstreetmap.org
+
+\bibitem{geoportal2023}
+Ministerio de Bienes Nacionales de Chile. (2023). \emph{Geoportal Nacional}. Retrieved from https://www.geoportal.cl
+
+\bibitem{nasa2023}
+NASA. (2023). \emph{Global multi-resolution terrain elevation data}. NASA Earthdata. Retrieved from https://www.earthdata.nasa.gov
+
+\bibitem{conaset}
+CONASET. (2023). \emph{Estadísticas de accidentes de tránsito}. Comisión Nacional de Seguridad de Tránsito. Retrieved from https://www.conaset.cl
+
+\end{thebibliography}
+
+\end{document}
